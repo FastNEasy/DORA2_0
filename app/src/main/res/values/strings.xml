@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">DORA2</string>
+    <string name="maps_api_key">Your api key</string>
+</resources>
