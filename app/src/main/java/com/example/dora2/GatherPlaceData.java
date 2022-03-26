@@ -60,6 +60,7 @@ public class GatherPlaceData extends AsyncTask<Object,String,String> {
             url = (String) objects[1];
             DownloadUrl downloadUrl = new DownloadUrl(); //tiek iegūts URL
             nearByPlaces = downloadUrl.getUrl(url);
+
         }
         catch (IOException e) {
             e.printStackTrace();
