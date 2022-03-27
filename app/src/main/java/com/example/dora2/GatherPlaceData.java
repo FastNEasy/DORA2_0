@@ -26,7 +26,7 @@ public class GatherPlaceData extends AsyncTask<Object,String,String> {
         try{
             JSONObject jsonObject = new JSONObject(s);
             JSONArray jsonArray = jsonObject.getJSONArray("results"); //saņem JSON formātā visus datus
-            googleMap.clear(); //katru reizi kad izsauc, notīra karti un pa jaunam saliek marķierus
+            //googleMap.clear(); //katru reizi kad izsauc, notīra karti un pa jaunam saliek marķierus
 
             for(int i =0; i<jsonArray.length(); i++){ //kamēr tiek iegūti dati
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i); //jauns json objekts
@@ -44,7 +44,7 @@ public class GatherPlaceData extends AsyncTask<Object,String,String> {
                 markerOptions.position(latlng); //pievieno pozīciju
                 markerOptions.snippet("Lorem Ipsum"); //description lokācijas marķierim
                 googleMap.addMarker(markerOptions); //pievieno marķieiri,
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,15)); //pārvieto kameru
+                //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,15)); //pārvieto kameru
             }
 
         }

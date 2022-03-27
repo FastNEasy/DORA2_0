@@ -31,12 +31,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 
@@ -74,9 +76,40 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
                 pOptions.width(5);
                 pOptions.color(Color.RED);
                 map.addPolyline(pOptions);
+                //for showing nearby things
+                if(pt.points.size() > 0){
+                    LatLng fromPlace = new LatLng(lat,lng);
+                    LatLng toPlace = pt.points.get(pt.points.size()-1);
+                    double dist = SphericalUtil.computeDistanceBetween(fromPlace,toPlace);
+                    LatLng tripCenter = getPolylineCentroid(pOptions);
+                    setNearbySpots(tripCenter, dist/2);
+                }
             }
         });
 
+    }
+    public void setNearbySpots(@NonNull LatLng center, double d){
+        //later pass here choices from the filter
+        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
+                "?location="+center.latitude+","+center.longitude+"&radius="+d+"&types=restaurant"+"&sensor=true"+
+                "&key=" + getResources().getString(R.string.maps_api_key);
+        Object dataFetch[] = new Object[2];
+        Log.i("link", url);
+        dataFetch[0] = map;
+        dataFetch[1] = url;
+
+        GatherPlaceData gpd = new GatherPlaceData();
+        gpd.execute(dataFetch);
+    }
+    public LatLng getPolylineCentroid(@NonNull PolylineOptions p) {
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for(int i = 0; i < p.getPoints().size(); i++){
+            builder.include(p.getPoints().get(i));
+        }
+
+        LatLngBounds bounds = builder.build();
+        return bounds.getCenter();
     }
 
     @Override

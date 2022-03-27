@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">DORA2</string>
-    <string name="maps_api_key">AIzaSyASRi7kRf3x705q584fgrstSNLXI91Cqf8</string>
+    <string name="maps_api_key">Api key here</string>
+    <string name="btn_logout">Log out!</string>
+    <string name="txt_login">Welcome to the DORA app!</string>
+    <string name="txt_hint_email">E-mail</string>
+    <string name="txt_hint_pss">Password</string>
+    <string name="txt_hint_pss2">Confirm Password</string>
+    <string name="btn_login">Log in!</string>
+    <string name="txt_register">Do not have an account? \n Tap me!</string>
+    <string name="btn_register">Register now!</string>
+    <string name="txt_backLogin">Already have an account? \n Tap me!</string>
 </resources>
