@@ -8,50 +8,42 @@
     android:orientation="vertical"
     tools:context=".MapScreen">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout"
-        android:orientation="horizontal"
-        android:padding="10dp">
 
-        <ImageButton
-            android:id="@+id/show_route"
-            android:layout_width="67dp"
-            android:layout_height="67dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart= "true"
-            android:layout_marginLeft="100dp"
-            android:src="@drawable/ic_baseline_local_cafe_24"
-            />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-<!--        <ImageButton-->
-<!--            android:id="@+id/markets_near"-->
-<!--            android:layout_width="67dp"-->
-<!--            android:layout_height="67dp"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_toEndOf="@+id/restaurants_near"-->
-<!--            android:src="@drawable/ic_baseline_shopping_basket_24"-->
-<!--            android:onClick="onButtonClick"-->
-<!--            />-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearLayout"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:elevation="4dp">
 
-<!--        <ImageButton-->
-<!--            android:id="@+id/pharmacy_near"-->
-<!--            android:layout_width="67dp"-->
-<!--            android:layout_height="67dp"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_toEndOf="@+id/markets_near"-->
-<!--            android:src="@drawable/ic_baseline_local_pharmacy_24"-->
-<!--            android:onClick="onButtonClick"-->
+                <ImageButton
+                    android:id="@+id/show_route"
+                    android:layout_width="67dp"
+                    android:layout_height="67dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart= "true"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/ic_baseline_local_cafe_24"
+                    />
+                <Button
+                    android:layout_marginTop="30dp"
+                    android:id="@+id/open_bottom_sheet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Open Modal" />
+            </LinearLayout>
 
-<!--            />-->
-    </LinearLayout>
+            <fragment
+                android:id="@+id/mapAPI"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/linearLayout"></fragment>
 
-    <fragment
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:id="@+id/mapAPI"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/linearLayout"></fragment>
-
-</RelativeLayout>
+        </FrameLayout>
+    </RelativeLayout>
