@@ -43,6 +43,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -115,6 +116,7 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
                         return true;
 
                     case R.id.logout:
+                        logout();
                         return true;
                 }
                 return false;
@@ -140,6 +142,36 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
                     setNearbySpots(tripCenter, dist/2);//sets nearby spots along the road
                     travelDist.setText("Distance: " + Math.round(dist) + " meters");
                     databaseCon(pt.points);
+                }
+            }
+        });
+        ImageButton openDialogue = findViewById(R.id.open_bottom_sheet);
+        openDialogue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long itemPosition = adapter.getItemId(position);
+                Log.i("POZICIJA", ""+itemPosition);
+                if(itemPosition == 0){
+                    chosenFilter = "museum";
+                    dialog.dismiss();
+                    Toast.makeText(MapScreen.this, "Museums selected", Toast.LENGTH_SHORT).show();
+                }
+                if(itemPosition == 1){
+                    chosenFilter = "restaurant";
+                    dialog.dismiss();
+                    Toast.makeText(MapScreen.this, "Restaurants selected", Toast.LENGTH_SHORT).show();
+                }
+                if(itemPosition == 2){
+                    chosenFilter = "park";
+                    dialog.dismiss();
+                    Toast.makeText(MapScreen.this, "Parks selected", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -190,36 +222,7 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
                 }
             }
         });
-        ImageButton openDialogue = findViewById(R.id.open_bottom_sheet);
-        openDialogue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-            }
-        });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                long itemPosition = adapter.getItemId(position);
-                Log.i("POZICIJA", ""+itemPosition);
-                if(itemPosition == 0){
-                    chosenFilter = "museum";
-                    dialog.dismiss();
-                    Toast.makeText(MapScreen.this, "Museums selected", Toast.LENGTH_SHORT).show();
-                }
-                if(itemPosition == 1){
-                    chosenFilter = "restaurant";
-                    dialog.dismiss();
-                    Toast.makeText(MapScreen.this, "Restaurants selected", Toast.LENGTH_SHORT).show();
-                }
-                if(itemPosition == 2){
-                    chosenFilter = "park";
-                    dialog.dismiss();
-                    Toast.makeText(MapScreen.this, "Parks selected", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
 
@@ -334,6 +337,10 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
         String output = "json"; //output formats
         String url ="https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters+"&key="+getString(R.string.maps_api_key);
         return url;
+    }
+    public void logout() {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(MapScreen.this, LoginActivity.class));
     }
 
 

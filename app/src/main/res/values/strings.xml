@@ -15,4 +15,5 @@
     <string name="museums">Museums</string>
     <string name="save_preferences">Save preferences</string>
     <string name="btn_modal">Open filter</string>
+    <string name="act_name">Profile</string>
 </resources>

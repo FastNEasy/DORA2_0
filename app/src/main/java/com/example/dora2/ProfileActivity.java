@@ -17,15 +17,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
-    Button btnLogout, btnMaps;
     TextView uEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         mAuth = FirebaseAuth.getInstance();
-        btnLogout = findViewById(R.id.btnLogout);
-        btnMaps = findViewById(R.id.btnMaps);
         uEmail = findViewById(R.id.txtUEmail);
 
 
@@ -42,16 +39,10 @@ public class ProfileActivity extends AppCompatActivity {
                     case R.id.profile:
                         return true;
                     case R.id.logout:
+                        logout();
                         return true;
                 }
                 return false;
-            }
-        });
-
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
             }
         });
 
@@ -65,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
         }else{
             String em = cUser.getEmail();
-            uEmail.setText("Hello user: " + em);
+            uEmail.setText("Hello! " + em + "! Have a nice day :)");
         }
     }
 
