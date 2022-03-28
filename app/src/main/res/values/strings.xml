@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">DORA2</string>
-    <string name="maps_api_key">API_KEY</string>
+    <string name="maps_api_key">APPIS iens</string>
     <string name="btn_logout">Log out!</string>
     <string name="txt_login">Welcome to the DORA app!</string>
     <string name="txt_hint_email">E-mail</string>
@@ -14,4 +14,5 @@
     <string name="restaurants">Restaurants</string>
     <string name="museums">Museums</string>
     <string name="save_preferences">Save preferences</string>
+    <string name="btn_modal">Open filter</string>
 </resources>
