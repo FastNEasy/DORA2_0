@@ -1,6 +1,7 @@
 package com.example.dora2;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -16,7 +17,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,9 +43,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -61,16 +68,17 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
     ImageButton showRoute;
     MarkerOptions marker;
     LatLng markerPosition;
+    String chosenFilter = "church";
+
+
     TextView travelDist;
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
-    private ArrayList<LatLng> loadedPoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        loadedPoints = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
         loadData();
         showRoute = findViewById(R.id.show_route); //atrod pogu kas zime celu
@@ -78,6 +86,40 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapAPI); //kartes fragments
         mapFragment.getMapAsync(this);
         client = LocationServices.getFusedLocationProviderClient(this.getApplicationContext());
+
+        ListView listView = new ListView(this);
+        List<String> data = new ArrayList<>();
+        data.add("museums");
+        data.add("restaurants");
+        data.add("parks");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,data);
+        listView.setAdapter(adapter);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapScreen.this);
+        builder.setCancelable(true);
+        builder.setView(listView);
+        final AlertDialog dialog = builder.create();
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.mapSelection);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.mapSelection:
+                        return true;
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.logout:
+                        return true;
+                }
+                return false;
+            }
+        });
 
         showRoute.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +141,6 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
                     travelDist.setText("Distance: " + Math.round(dist) + " meters");
                     databaseCon(pt.points);
                 }
-
             }
         });
 
@@ -149,13 +190,43 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
                 }
             }
         });
+        ImageButton openDialogue = findViewById(R.id.open_bottom_sheet);
+        openDialogue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long itemPosition = adapter.getItemId(position);
+                Log.i("POZICIJA", ""+itemPosition);
+                if(itemPosition == 0){
+                    chosenFilter = "museum";
+                    dialog.dismiss();
+                    Toast.makeText(MapScreen.this, "Museums selected", Toast.LENGTH_SHORT).show();
+                }
+                if(itemPosition == 1){
+                    chosenFilter = "restaurant";
+                    dialog.dismiss();
+                    Toast.makeText(MapScreen.this, "Restaurants selected", Toast.LENGTH_SHORT).show();
+                }
+                if(itemPosition == 2){
+                    chosenFilter = "park";
+                    dialog.dismiss();
+                    Toast.makeText(MapScreen.this, "Parks selected", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
+
+
     public void setNearbySpots(@NonNull LatLng center, double d){
         //later pass here choices from the filter
-        //double halfRad = d / 2;
-        //d = d + halfRad;
         String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
-                "?location="+center.latitude+","+center.longitude+"&radius="+d+"&types=restaurant"+"&sensor=true"+
+                "?location="+center.latitude+","+center.longitude+"&radius="+d+"&types="+chosenFilter+"&sensor=true"+
                 "&key=" + getResources().getString(R.string.maps_api_key);
         Object dataFetch[] = new Object[2];
         Log.i("link", url);
@@ -180,7 +251,6 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
         map = googleMap;
         map.setOnMapClickListener(this);
         getCurrentLocation();
-
     }
 
     private void getCurrentLocation(){ //ja nav iedoti permissioni jautā pēc permission
@@ -265,5 +335,8 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
         String url ="https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters+"&key="+getString(R.string.maps_api_key);
         return url;
     }
+
+
+
 }
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is a Modal BottomSheet"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/parks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginTop="156dp"
+        android:buttonTint="@color/black"
+        android:text="@string/parks"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/restaurants"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginTop="32dp"
+        android:buttonTint="@color/black"
+        android:text="@string/restaurants"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/museums"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:buttonTint="@color/black"
+        android:text="@string/museums"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="268dp"
+        android:layout_height="68dp"
+        android:text="@string/save_preferences" />
+
+</LinearLayout>

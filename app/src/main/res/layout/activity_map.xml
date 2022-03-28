@@ -1,61 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".MapScreen">
+
+
+
+<FrameLayout
+    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MapScreen">
+    android:layout_above="@id/bottom_navigation"
+    />
+
+<com.google.android.material.bottomnavigation.BottomNavigationView
+    android:id="@+id/bottom_navigation"
+    android:layout_alignParentBottom="true"
+    android:layout_gravity="bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:menu="@menu/bottom_menu"
+    android:background="@color/black"
+    app:itemIconTint="@android:color/white"
+    app:itemTextColor="@android:color/white"/>
+
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="5dp"
+        android:elevation="4dp">
 
         <ImageButton
             android:id="@+id/show_route"
-            android:layout_width="67dp"
-            android:layout_height="67dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart= "true"
-            android:layout_marginLeft="100dp"
-            android:src="@drawable/ic_baseline_local_cafe_24"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_directions"
+            android:backgroundTint="@color/design_default_color_on_secondary"
             />
-        <TextView
-            android:id="@+id/travelDist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"/>
-<!--        <ImageButton-->
-<!--            android:id="@+id/markets_near"-->
-<!--            android:layout_width="67dp"-->
-<!--            android:layout_height="67dp"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_toEndOf="@+id/restaurants_near"-->
-<!--            android:src="@drawable/ic_baseline_shopping_basket_24"-->
-<!--            android:onClick="onButtonClick"-->
-<!--            />-->
-
-<!--        <ImageButton-->
-<!--            android:id="@+id/pharmacy_near"-->
-<!--            android:layout_width="67dp"-->
-<!--            android:layout_height="67dp"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_toEndOf="@+id/markets_near"-->
-<!--            android:src="@drawable/ic_baseline_local_pharmacy_24"-->
-<!--            android:onClick="onButtonClick"-->
-
-<!--            />-->
+        <ImageButton
+            android:id="@+id/open_bottom_sheet"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart= "true"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/ic_filter"
+            android:backgroundTint="@color/design_default_color_on_secondary"/>
     </LinearLayout>
 
     <fragment
-        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:id="@+id/mapAPI"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/linearLayout"></fragment>
 
+</FrameLayout>
 </RelativeLayout>
