@@ -58,7 +58,7 @@ tools:context=".MapScreen">
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart= "true"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_restaurant"
+            android:src="@drawable/ic_filter"
             android:backgroundTint="@color/design_default_color_on_secondary"/>
     </LinearLayout>
 
