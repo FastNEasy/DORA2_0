@@ -43,21 +43,23 @@ tools:context=".MapScreen">
 
         <ImageButton
             android:id="@+id/show_route"
-            android:layout_width="67dp"
-            android:layout_height="67dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart= "true"
             android:layout_marginLeft="5dp"
             android:src="@drawable/ic_directions"
+            android:backgroundTint="@color/design_default_color_on_secondary"
             />
         <ImageButton
             android:id="@+id/open_bottom_sheet"
-            android:layout_width="67dp"
-            android:layout_height="67dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart= "true"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_restaurant" />
+            android:src="@drawable/ic_restaurant"
+            android:backgroundTint="@color/design_default_color_on_secondary"/>
     </LinearLayout>
 
     <fragment

@@ -5,46 +5,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterActivity"
-    android:layout_margin="20dp">
+    android:background="@color/grey">
     <TextView
         android:id="@+id/txtRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="100dp"
+        android:paddingTop="50dp"
         android:text="@string/txt_login"
         android:textSize="20sp"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:textColor="@color/design_default_color_on_primary"/>
     <EditText
         android:id="@+id/txtEmailR"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtRegister"
         android:hint="@string/txt_hint_email"
-        android:layout_marginBottom="20dp"
-        android:inputType="textEmailAddress"/>
+        android:layout_margin="20dp"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/design_default_color_on_primary"/>
     <EditText
         android:id="@+id/txtPasswordR"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtEmailR"
         android:hint="@string/txt_hint_pss"
-        android:layout_marginBottom="20dp"
-        android:inputType="textPassword"/>
+        android:layout_margin="20dp"
+        android:inputType="textPassword"
+        android:textColor="@color/design_default_color_on_primary"/>
     <EditText
         android:id="@+id/txtRepeatPss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtPasswordR"
         android:hint="@string/txt_hint_pss2"
-        android:layout_marginBottom="20dp"
-        android:inputType="textPassword"/>
+        android:layout_margin="20dp"
+        android:inputType="textPassword"
+        android:textColor="@color/design_default_color_on_primary"/>
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtRepeatPss"
         android:text="@string/btn_register"
-        android:layout_marginBottom="20dp"/>
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/design_default_color_secondary"/>
     <TextView
         android:id="@+id/txtLogin"
         android:layout_width="match_parent"
@@ -52,6 +58,7 @@
         android:text="@string/txt_backLogin"
         android:layout_below="@+id/btnRegister"
         android:textAlignment="center"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/design_default_color_on_primary"/>
 
 </RelativeLayout>
