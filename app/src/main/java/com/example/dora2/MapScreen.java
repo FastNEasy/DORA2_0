@@ -1,8 +1,10 @@
 package com.example.dora2;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -37,6 +40,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
@@ -50,6 +55,8 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
     ImageButton showRoute;
     MarkerOptions marker;
     LatLng markerPosition;
+
+
 
 
     @Override
@@ -149,6 +156,7 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
         map.clear();
         marker = new MarkerOptions().position(latLng).title("Lat" + latLng.latitude +" Lng"+ latLng.longitude).icon(BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
         map.addMarker(marker);
         markerPosition = marker.getPosition();
         String url = getUrl(marker.getPosition(), "driving");//dabū url
@@ -159,8 +167,11 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
     }
 
     private String getUrl(LatLng destinationPoint, String directionMode){ //dabū url priekš directions
+        String dest_origin = "";
         String start_origin = "origin=" + lat+","+lng; //sakuma pozicija
-        String dest_origin = "destination="+ destinationPoint.latitude+","+destinationPoint.longitude; //destination
+        Log.i("DESTINATION", start_origin);
+        dest_origin = "destination="+ destinationPoint.latitude+","+destinationPoint.longitude; //destination
+        Log.i("DESTINATION", dest_origin);
         String mode = "mode="+directionMode; //parvietosanas veids
         String parameters = start_origin+"&"+dest_origin+"&"+mode; //viss salikst kopa
         String output = "json"; //output formats

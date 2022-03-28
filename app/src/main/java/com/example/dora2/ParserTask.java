@@ -21,7 +21,7 @@ public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<Str
 
     GoogleMap googleMap;
     //Polyline line;
-    public static ArrayList<LatLng> points = new ArrayList<LatLng>();
+    public static ArrayList<LatLng> points = null;
 
 
 
@@ -30,7 +30,7 @@ public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<Str
     protected void onPostExecute(List<List<HashMap<String, String>>> result) {
 
         //PolylineOptions lineOptions = new PolylineOptions();
-
+        points = new ArrayList<LatLng>();
         // Traversing through all the routes
         for(int i=0;i<result.size();i++){
 
