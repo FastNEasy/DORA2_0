@@ -13,7 +13,7 @@
         android:text="This is a Modal BottomSheet"
         android:textSize="25sp" />
 
-    <CheckBox
+    <Button
         android:id="@+id/parks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:text="@string/parks"
         android:textColor="@color/black" />
 
-    <CheckBox
+    <Button
         android:id="@+id/restaurants"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
         android:text="@string/restaurants"
         android:textColor="@color/black" />
 
-    <CheckBox
+    <Button
         android:id="@+id/museums"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
