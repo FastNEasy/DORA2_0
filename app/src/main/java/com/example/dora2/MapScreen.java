@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,11 +37,19 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
@@ -52,44 +61,99 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
     ImageButton showRoute;
     MarkerOptions marker;
     LatLng markerPosition;
-
+    TextView travelDist;
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase mDatabase;
+    private ArrayList<LatLng> loadedPoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-
+        loadedPoints = new ArrayList<>();
+        mAuth = FirebaseAuth.getInstance();
+        loadData();
         showRoute = findViewById(R.id.show_route); //atrod pogu kas zime celu
-
+        travelDist = findViewById(R.id.travelDist);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapAPI); //kartes fragments
         mapFragment.getMapAsync(this);
         client = LocationServices.getFusedLocationProviderClient(this.getApplicationContext());
-
 
         showRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ParserTask pt = new ParserTask();
-                PolylineOptions pOptions = new PolylineOptions();
-                pOptions.addAll(pt.points);
-                Log.i("POINTS", pt.coords()+ "");
-                pOptions.width(5);
-                pOptions.color(Color.RED);
-                map.addPolyline(pOptions);
-                //for showing nearby things
-                if(pt.points.size() > 0){
+                if(pt.points != null){
+                    PolylineOptions pOptions = new PolylineOptions();
+                    pOptions.addAll(pt.points);
+                    Log.i("POINTS", pt.coords()+ "");
+                    pOptions.width(5);
+                    pOptions.color(Color.RED);
+                    map.addPolyline(pOptions);
+                    //for showing nearby things
                     LatLng fromPlace = new LatLng(lat,lng);
                     LatLng toPlace = pt.points.get(pt.points.size()-1);
                     double dist = SphericalUtil.computeDistanceBetween(fromPlace,toPlace);
-                    LatLng tripCenter = getPolylineCentroid(pOptions);
-                    setNearbySpots(tripCenter, dist/2);
+                    LatLng tripCenter = getPolylineCentroid(pOptions);//gets the middle lat and lng of the route
+                    setNearbySpots(tripCenter, dist/2);//sets nearby spots along the road
+                    travelDist.setText("Distance: " + Math.round(dist) + " meters");
+                    databaseCon(pt.points);
                 }
+
             }
         });
 
     }
+    private void databaseCon(ArrayList<LatLng> p){
+        FirebaseUser mUser = mAuth.getCurrentUser();
+        String uId = mUser.getUid();
+        mDatabase = FirebaseDatabase.getInstance("https://dora2-0-default-rtdb.europe-west1.firebasedatabase.app");
+        DatabaseReference mRef = mDatabase.getReference().child("users").child(uId);
+        mRef.child("last_destination").setValue(p);
+
+    }
+    private void loadData(){
+        FirebaseUser mUser = mAuth.getCurrentUser();
+        String uId = mUser.getUid();
+        mDatabase = FirebaseDatabase.getInstance("https://dora2-0-default-rtdb.europe-west1.firebasedatabase.app");
+        DatabaseReference mRef = mDatabase.getReference();
+        mRef.child("users").child(uId).child("last_destination").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    //Log.d("firebase", String.valueOf(task.getResult()));
+                    DataSnapshot snap = task.getResult();
+                    //dataSnapshot.child("key").child("name").getValue().toString())
+                    Log.d("firebase",snap.toString());
+                    Log.d("firebase", String.valueOf(snap.child("0").getValue()));
+                    long cnt = snap.getChildrenCount() - 1;
+                    String needed = String.valueOf(cnt);
+                    double tempLat = (double) snap.child(needed).child("latitude").getValue();
+                    double tempLng = (double) snap.child(needed).child("longitude").getValue();
+                    LatLng endPos = new LatLng(tempLat,tempLng);
+                    Log.d("firebase", String.valueOf(snap.child(needed).getValue()));
+                    Log.d("firebase", String.valueOf(snap.child(needed).child("latitude").getValue()));
+
+                    marker = new MarkerOptions().position(endPos).title("Destination").icon(BitmapDescriptorFactory
+                            .defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    map.addMarker(marker);
+                    markerPosition = marker.getPosition();
+                    String url = getUrl(marker.getPosition(), "driving");//dabū url
+                    Log.i("url", url);
+                    DownloadTask dTask = new DownloadTask();
+                    dTask.execute(url);
+
+                }
+            }
+        });
+    }
     public void setNearbySpots(@NonNull LatLng center, double d){
         //later pass here choices from the filter
+        //double halfRad = d / 2;
+        //d = d + halfRad;
         String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
                 "?location="+center.latitude+","+center.longitude+"&radius="+d+"&types=restaurant"+"&sensor=true"+
                 "&key=" + getResources().getString(R.string.maps_api_key);
@@ -102,8 +166,7 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
         gpd.execute(dataFetch);
     }
     public LatLng getPolylineCentroid(@NonNull PolylineOptions p) {
-
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();//builds bounds so a center can be found from polyline
         for(int i = 0; i < p.getPoints().size(); i++){
             builder.include(p.getPoints().get(i));
         }
@@ -117,6 +180,7 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
         map = googleMap;
         map.setOnMapClickListener(this);
         getCurrentLocation();
+
     }
 
     private void getCurrentLocation(){ //ja nav iedoti permissioni jautā pēc permission
@@ -180,12 +244,13 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
     @Override
     public void onMapClick(@NonNull LatLng latLng) {
         map.clear();
-        marker = new MarkerOptions().position(latLng).title("Lat" + latLng.latitude +" Lng"+ latLng.longitude).icon(BitmapDescriptorFactory
+        marker = new MarkerOptions().position(latLng).title("Destination").icon(BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         map.addMarker(marker);
         markerPosition = marker.getPosition();
         String url = getUrl(marker.getPosition(), "driving");//dabū url
         Log.i("url", url);
+        Toast.makeText(this, "Destination set", Toast.LENGTH_SHORT).show();
         DownloadTask dTask = new DownloadTask();
         dTask.execute(url);
 

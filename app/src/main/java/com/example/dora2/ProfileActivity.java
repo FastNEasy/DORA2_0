@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class ProfileActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     Button btnLogout, btnMaps;
+    TextView uEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +22,7 @@ public class ProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         btnLogout = findViewById(R.id.btnLogout);
         btnMaps = findViewById(R.id.btnMaps);
-
+        uEmail = findViewById(R.id.txtUEmail);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,6 +43,9 @@ public class ProfileActivity extends AppCompatActivity {
         FirebaseUser cUser = mAuth.getCurrentUser();
         if(cUser == null){
             startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+        }else{
+            String em = cUser.getEmail();
+            uEmail.setText("Hello user: " + em);
         }
     }
 

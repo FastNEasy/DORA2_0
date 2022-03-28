@@ -38,11 +38,14 @@ public class GatherPlaceData extends AsyncTask<Object,String,String> {
                 JSONObject getName = jsonArray.getJSONObject(i); //jauns jsonobjekts
                 String name = getName.getString("name"); //iegūst vietas nosaukumu
 
+                JSONObject getAddress = jsonArray.getJSONObject(i);
+                String address = getAddress.getString("vicinity");
+
                 LatLng latlng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)); //parsē lokaciju (lat, lng) no stringa uz double
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.title(name); //pievieno marķierim nosaukumu
                 markerOptions.position(latlng); //pievieno pozīciju
-                markerOptions.snippet("Lorem Ipsum"); //description lokācijas marķierim
+                markerOptions.snippet(address); //description lokācijas marķierim
                 googleMap.addMarker(markerOptions); //pievieno marķieiri,
                 //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,15)); //pārvieto kameru
             }
