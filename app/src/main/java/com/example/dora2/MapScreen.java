@@ -38,6 +38,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
@@ -66,6 +68,26 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
         client = LocationServices.getFusedLocationProviderClient(this.getApplicationContext());
 
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.mapSelection);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.mapSelection:
+                        return true;
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.logout:
+                        return true;
+                }
+                return false;
+            }
+        });
+
         showRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +108,9 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
                 }
             }
         });
+
+
+
 
     }
     public void setNearbySpots(@NonNull LatLng center, double d){
