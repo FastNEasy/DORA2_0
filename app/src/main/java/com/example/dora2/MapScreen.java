@@ -61,7 +61,7 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
     ImageButton showRoute;
     MarkerOptions marker;
     LatLng markerPosition;
-    String chosenFilter;
+    String chosenFilter = "church";
 
 
 
@@ -131,7 +131,7 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
             }
         });
 
-        Button openDialogue = findViewById(R.id.open_bottom_sheet);
+        ImageButton openDialogue = findViewById(R.id.open_bottom_sheet);
         openDialogue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
