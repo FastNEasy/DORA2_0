@@ -23,32 +23,32 @@ public class DirectionsJSONParser {
 
         try {
 
-            jRoutes = jObject.getJSONArray("routes");
+            jRoutes = jObject.getJSONArray("routes"); //saņem visus routes
 
-            /** Traversing all routes */
+            //iet cauri visiem routes
             for(int i=0;i<jRoutes.length();i++){
-                jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray("legs");
+                jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray("legs"); //dabū no jsonArray legs
                 List path = new ArrayList<HashMap<String, String>>();
 
-                /** Traversing all legs */
+                //iet cauri visiem jlegs
                 for(int j=0;j<jLegs.length();j++){
-                    jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps");
+                    jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps"); //sanem visus steps no jsonarray
 
-                    /** Traversing all steps */
+                    //iet cauri visiem steps
                     for(int k=0;k<jSteps.length();k++){
                         String polyline = "";
-                        polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points");
-                        List<LatLng> list = decodePoly(polyline);
+                        polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points"); //sanem polyline
+                        List<LatLng> list = decodePoly(polyline); //atkode polyline
 
-                        /** Traversing all points */
+                        //iet cauri atkodetajam polyline
                         for(int l=0;l<list.size();l++){
-                            HashMap<String, String> hm = new HashMap<String, String>();
-                            hm.put("lat", Double.toString(((LatLng)list.get(l)).latitude) );
-                            hm.put("lng", Double.toString(((LatLng)list.get(l)).longitude) );
-                            path.add(hm);
+                            HashMap<String, String> hm = new HashMap<String, String>(); // jauns hashmaps
+                            hm.put("lat", Double.toString(((LatLng)list.get(l)).latitude)); //ieliek hashmapa lat
+                            hm.put("lng", Double.toString(((LatLng)list.get(l)).longitude)); //ieliek hashmapa lng
+                            path.add(hm); //pievieno hashamapu arraylistam
                         }
                     }
-                    routes.add(path);
+                    routes.add(path); //pievieno listam
                 }
             }
         } catch (JSONException e) {
@@ -60,7 +60,7 @@ public class DirectionsJSONParser {
 
 
     private List<LatLng> decodePoly(String encoded) { //https://stackoverflow.com/questions/15924834/decoding-polyline-with-new-google-maps-api
-
+        //atkode polyline
         List<LatLng> poly = new ArrayList<LatLng>();
         int index = 0, len = encoded.length();
         int lat = 0, lng = 0;
@@ -89,7 +89,6 @@ public class DirectionsJSONParser {
                     (((double) lng / 1E5)));
             poly.add(p);
         }
-
         return poly;
     }
 }

@@ -20,58 +20,49 @@ import java.util.List;
 public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> > {
 
     GoogleMap googleMap;
-    //Polyline line;
-    public static ArrayList<LatLng> points = null;
+    public static ArrayList<LatLng> points = null;  //arraylists, kas satur punktu koordinātes ceļa zīmēšanai
 
 
 
-    // Executes in UI thread, after the parsing process
+    //tiek darbināts tad kad ir parsēti iegūtie dati
     @Override
     protected void onPostExecute(List<List<HashMap<String, String>>> result) {
 
-        //PolylineOptions lineOptions = new PolylineOptions();
-        points = new ArrayList<LatLng>();
-        // Traversing through all the routes
-        for(int i=0;i<result.size();i++){
+        points = new ArrayList<LatLng>(); //inicializē arraylistu
 
-            // Fetching i-th route
-            List<HashMap<String, String>> path = result.get(i);
+        for(int i=0;i<result.size();i++){ //iet cauri visiem route
 
-            // Fetching all the points in i-th route
-            for(int j=0;j<path.size();j++){
+            List<HashMap<String, String>> path = result.get(i); //dabū konkrēto route
+
+
+            for(int j=0;j<path.size();j++){ //dabū visus route punktus
                 HashMap<String,String> point = path.get(j);
 
                 double lat = Double.parseDouble(point.get("lat"));
                 double lng = Double.parseDouble(point.get("lng"));
                 LatLng position = new LatLng(lat, lng);
-                //Log.i("POSITION", String.valueOf(position));
-                points.add(position);
+                points.add(position); //pievieno punktu sarakstam
             }
         }
     }
 
 
-    // Parsing the data in non-ui thread
+    // tiek parsēti visi iegūtie json dati
     @Override
     protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
-
         JSONObject jObject;
         List<List<HashMap<String, String>>> routes = null;
-
         try{
-            jObject = new JSONObject(jsonData[0]);
-            DirectionsJSONParser parser = new DirectionsJSONParser();
-
-            // Starts parsing data
-            routes = parser.parse(jObject);
+            jObject = new JSONObject(jsonData[0]); //jsonobjekts
+            DirectionsJSONParser parser = new DirectionsJSONParser(); //izsaukta json parser metode
+            routes = parser.parse(jObject); //parsē datus
         }catch(Exception e){
             e.printStackTrace();
         }
         return routes;
     }
 
-    public static ArrayList<LatLng> coords(){
-
+    public static ArrayList<LatLng> coords(){ //atgriež punktu sarakstu ar koordinātēm
         return points;
     }
 }

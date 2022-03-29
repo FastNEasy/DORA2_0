@@ -11,8 +11,8 @@ import java.net.URL;
 
 public class DownloadUrl {
 
-    public String getUrl(String url) throws IOException {
-        String urlString = "";
+    public String getUrl(String url) throws IOException { //metode saņem url un nolādē tajos esošos datus
+        String data = "";
         HttpURLConnection httpURLConnection = null;
         InputStream inputStream = null;
 
@@ -27,17 +27,16 @@ public class DownloadUrl {
             StringBuffer sb = new StringBuffer();
 
             String line = "";
-
             while((line = bufferedReader.readLine()) !=null){
                 sb.append(line);
             }
-            urlString = sb.toString();
+            data = sb.toString();
             bufferedReader.close();
             httpURLConnection.disconnect();
             inputStream.close();
         }catch (Exception e){
             Log.d("Exception", e.toString());
         }
-        return urlString;
+        return data; //atgriež datus
     }
 }

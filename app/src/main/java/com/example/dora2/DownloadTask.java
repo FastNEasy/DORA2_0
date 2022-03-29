@@ -5,18 +5,13 @@ import android.util.Log;
 
 public class DownloadTask extends AsyncTask<String, Void, String> {
 
-    // Downloading data in non-ui thread
+    //datu noladēšanas process notiek backgrounda
     @Override
     protected String doInBackground(String... url) {
-
-        // For storing data from web service
-
         String data = "";
-
         try{
-            // Fetching the data from web service
             DownloadUrl downloadUrl = new DownloadUrl();
-            data = downloadUrl.getUrl(url[0]);
+            data = downloadUrl.getUrl(url[0]); //nolādē api datus
             Log.i("DATA", data);
         }catch(Exception e){
             Log.d("Background Task",e.toString());
@@ -24,15 +19,12 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
         return data;
     }
 
-    // Executes in UI thread, after the execution of
-    // doInBackground()
+
+    //izpildās kad ir pabeigta datu lādēšana
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-
-        ParserTask parserTask = new ParserTask();
-
-        // Invokes the thread for parsing the JSON data
+        ParserTask parserTask = new ParserTask(); //tiek izsaukta klase parserTask
         parserTask.execute(result);
     }
 }
