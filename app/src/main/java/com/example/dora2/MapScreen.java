@@ -197,28 +197,29 @@ public class MapScreen extends AppCompatActivity implements OnMapReadyCallback, 
                     Log.e("firebase", "Error getting data", task.getException());
                 }
                 else {
-                    //Log.d("firebase", String.valueOf(task.getResult()));
-                    DataSnapshot snap = task.getResult();
-                    //dataSnapshot.child("key").child("name").getValue().toString())
-                    Log.d("firebase",snap.toString());
-                    Log.d("firebase", String.valueOf(snap.child("0").getValue()));
-                    long cnt = snap.getChildrenCount() - 1;
-                    String needed = String.valueOf(cnt);
-                    double tempLat = (double) snap.child(needed).child("latitude").getValue();
-                    double tempLng = (double) snap.child(needed).child("longitude").getValue();
-                    LatLng endPos = new LatLng(tempLat,tempLng);
-                    Log.d("firebase", String.valueOf(snap.child(needed).getValue()));
-                    Log.d("firebase", String.valueOf(snap.child(needed).child("latitude").getValue()));
+                    if(task.getResult().exists()){
+                        //Log.d("firebase", String.valueOf(task.getResult()));
+                        DataSnapshot snap = task.getResult();
+                        //dataSnapshot.child("key").child("name").getValue().toString())
+                        Log.d("firebase",snap.toString());
+                        Log.d("firebase", String.valueOf(snap.child("0").getValue()));
+                        long cnt = snap.getChildrenCount() - 1;
+                        String needed = String.valueOf(cnt);
+                        double tempLat = (double) snap.child(needed).child("latitude").getValue();
+                        double tempLng = (double) snap.child(needed).child("longitude").getValue();
+                        LatLng endPos = new LatLng(tempLat,tempLng);
+                        Log.d("firebase", String.valueOf(snap.child(needed).getValue()));
+                        Log.d("firebase", String.valueOf(snap.child(needed).child("latitude").getValue()));
 
-                    marker = new MarkerOptions().position(endPos).title("Destination").icon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                    map.addMarker(marker);
-                    markerPosition = marker.getPosition();
-                    String url = getUrl(marker.getPosition(), "driving");//dabū url
-                    Log.i("url", url);
-                    DownloadTask dTask = new DownloadTask();
-                    dTask.execute(url);
-
+                        marker = new MarkerOptions().position(endPos).title("Destination").icon(BitmapDescriptorFactory
+                                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                        map.addMarker(marker);
+                        markerPosition = marker.getPosition();
+                        String url = getUrl(marker.getPosition(), "driving");//dabū url
+                        Log.i("url", url);
+                        DownloadTask dTask = new DownloadTask();
+                        dTask.execute(url);
+                    }
                 }
             }
         });
