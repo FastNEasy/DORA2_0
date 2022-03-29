@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">DORA2</string>
-    <string name="maps_api_key">Api key here!</string>
+    <string name="maps_api_key">My api key</string>
     <string name="btn_logout">Log out!</string>
     <string name="txt_login">Welcome to the DORA app!</string>
     <string name="txt_hint_email">E-mail</string>
